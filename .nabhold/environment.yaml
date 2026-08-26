@@ -89,12 +89,14 @@ compatibility_policy:
 # ------------------------------------------------------------------------------
 
 validation:
+  # Domain-qualified paths matching capabilities.yaml's nesting — see
+  # baobab's environment.yaml for why flat names ("node", "docker") don't
+  # work with a direct yq lookup.
   required_capabilities:
-    - "node"
-    - "pnpm"
-    - "github_cli"
-    - "turborepo"     # NOT YET AVAILABLE — see pending_capabilities below
-    - "playwright"    # NOT YET AVAILABLE — see pending_capabilities below
+    - "languages.node"
+    - "package_managers.pnpm"
+    - "development.github_cli"
+    - "frontend_tooling.turbo"
 
   # Capabilities the `full` profile requires that this profile deliberately
   # does NOT — mirrors the exclusion pattern used in baobab's own
@@ -118,15 +120,12 @@ validation:
     - name: "cosign"
       reason: "Supply-chain signing tool for baobab-dev's own image; not a frontend-repo requirement."
 
-  # This block exists so CI can distinguish "capability check skipped
-  # because not yet buildable" from "capability check failed."
-  pending_capabilities:
-    - name: "turborepo"
-      status: "not yet in baobab-dev versions.yaml"
-      tracked_in: "ADR-0001 section 2.8a"
-    - name: "playwright"
-      status: "not yet in baobab-dev versions.yaml"
-      tracked_in: "ADR-0001 section 2.8a"
+  # As of this update, `frontend_tooling.turbo` is present in versions.yaml
+  # and capabilities.yaml — no longer pending. Playwright/Sharp/Lighthouse
+  # were never pending FOR THIS profile in the first place; they belong to
+  # the separate `frontend-e2e` profile (see environment-e2e declarations,
+  # not this file) and were removed from consideration here entirely.
+  pending_capabilities: []
 
 # ------------------------------------------------------------------------------
 # Notes
@@ -134,17 +133,22 @@ validation:
 
 notes:
   - >
-    This file cannot be fully CI-validated yet: `environment.minimum_version`
-    is null and two of five required_capabilities are pending, because the
-    `--target frontend` baobab-dev build does not exist yet. This is
-    expected at this stage of rollout (ADR-0001 section 2.7, step 3) and is
-    not a defect in this declaration.
+    `environment.minimum_version` is still null — no baobab-dev image tagged
+    `*-frontend` has been published yet, even though the required tooling
+    (Turborepo) now exists in versions.yaml/capabilities.yaml. The Dockerfile
+    `--target frontend` stage itself is the remaining blocker, tracked as
+    its own restructuring effort, not a versions.yaml gap.
   - >
-    Once baobab-dev ships its first `*-frontend` tag with Turborepo and
-    Playwright present in versions.yaml, update `minimum_version` here (and
-    in the other three copies of this file) in the same commit — do not let
-    the four repos update on different schedules, or they silently diverge
-    on the one thing this profile exists to keep identical.
+    Once baobab-dev publishes its first `*-frontend` tag, update
+    `minimum_version` here (and in the other three copies of this file) in
+    the same commit — do not let the four repos update on different
+    schedules, or they silently diverge on the one thing this profile
+    exists to keep identical.
   - >
     `application.version` is a placeholder in every copy of this file until
     each repo has real release versioning to source it from.
+  - >
+    Playwright, Sharp, and Lighthouse are NOT part of this profile's
+    requirements — they belong to `frontend-e2e`, a CI-only profile a
+    repo's test workflow references directly by image tag, not something
+    this file (the daily-devcontainer declaration) should ever require.
