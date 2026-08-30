@@ -6,9 +6,9 @@ Accepted with expiry
 
 ## Decision
 
-Use the official Node 20 Dev Container until baobab-dev publishes its declared frontend
-target. Do not use the current Node 24 full image because Medusa's supported Node range
-for this repository ends below Node 23.
+Use the official Node 22 Dev Container until baobab-dev publishes its declared frontend
+target. Node 22.14 satisfies both Medusa and pnpm 11.24; the current Node 24 full image
+falls outside this repository's supported range.
 
 ## Exit criterion
 
