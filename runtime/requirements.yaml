@@ -1,0 +1,30 @@
+schema:
+  name: "nabhold-digital-estate-runtime-requirements"
+  version: "1.0"
+application:
+  name: "zuribeans"
+  entity_id: "ZURIBEANS"
+  kind: "b2b-digital-estate"
+  container_port: 3000
+ownership:
+  application: "nabhold/zuribeans"
+  commerce: "nabhold/baobab-trade"
+  production_infrastructure: "nabhold/infrastructure"
+dependencies:
+  baobab_trade:
+    required: true
+    protocol: "HTTPS"
+    interface: "Medusa v2 Store API"
+health:
+  liveness_path: "/api/health"
+environment:
+  public:
+    - "NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY"
+    - "NEXT_PUBLIC_SITE_URL"
+    - "NEXT_PUBLIC_MARKET"
+  server_only:
+    - "MEDUSA_BACKEND_URL"
+constraints:
+  - "The publishable key is storefront-visible; administrative credentials are prohibited."
+  - "No Baobab database may be accessed directly."
+  - "Cloud resources, DNS, certificates and secret injection belong to nabhold/infrastructure."

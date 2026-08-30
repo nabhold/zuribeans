@@ -1,0 +1,32 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-ink: #172219;
+  --color-canvas: #faf7f0;
+  --color-leaf: #526a4f;
+  --color-clay: #bb5b35;
+  --color-sand: #e8ddc8;
+  --font-sans: Arial, Helvetica, sans-serif;
+  --font-display: Georgia, "Times New Roman", serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+html {
+  scroll-behavior: smooth;
+}
+body {
+  margin: 0;
+  background: var(--color-canvas);
+  color: var(--color-ink);
+}
+a {
+  text-underline-offset: 0.2em;
+}
+:focus-visible {
+  outline: 3px solid var(--color-clay);
+  outline-offset: 4px;
+}

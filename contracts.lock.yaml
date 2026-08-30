@@ -1,0 +1,20 @@
+schema:
+  name: "nabhold-contract-consumption-lock"
+  version: "1.0"
+consumer:
+  repository: "nabhold/zuribeans"
+  entity_id: "ZURIBEANS"
+sources:
+  shared:
+    repository: "nabhold/shared"
+    commit: "498c431ea7eb76eb038975bc49e7087499d30d48"
+    legal_entity_registry: "contracts/legal-entity/registry.yaml"
+    development_environment: "contracts/development-environment/schema.yaml"
+  trade:
+    repository: "nabhold/baobab-trade"
+    commit: "d5aa34bdcbb99f4dac6b55321ef2e7eaeeb9e17a"
+    api: "Medusa v2 Store API"
+gaps:
+  - "Shared currently classifies Zuribeans as B2C/Astro; current approved direction is B2B/Next.js."
+  - "Shared has not published a canonical commerce Store API package."
+  - "Trade has not published company accounts, quotations, saved lists or approval-flow contracts."
