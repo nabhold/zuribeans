@@ -1,16 +1,16 @@
-# ADR 0003: Temporary Codespaces image
+# ADR 0003: Standard Codespaces image
 
 ## Status
 
-Accepted with expiry
+Accepted
 
 ## Decision
 
-Use the official Node 22 Dev Container until baobab-dev publishes its declared frontend
-target. Node 22.14 satisfies both Medusa and pnpm 11.24; the current Node 24 full image
-falls outside this repository's supported range.
+Use the published `ghcr.io/nabhold/baobab-dev:1.2.6-frontend` image for Codespaces
+and compatible local Dev Containers. Use `1.2.6-frontend-e2e` only for browser-dependent
+CI jobs.
 
-## Exit criterion
+## Consequences
 
-Switch to a pinned `nabhold/baobab-dev` frontend image as soon as that image exists and
-satisfies the Shared development-environment declaration.
+The estate follows the organisation-standard development environment while keeping daily
+frontend work separate from the larger browser-dependent CI profile.
