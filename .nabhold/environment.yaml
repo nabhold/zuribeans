@@ -8,7 +8,7 @@ application:
 environment:
   provider: "baobab-dev"
   profile: "frontend"
-  minimum_version: null
+  minimum_version: "1.2.6-frontend"
   contract_minimum_version: "1.0"
 compatibility_policy:
   strict_runtime_versions: true
@@ -28,5 +28,5 @@ validation:
     - { name: "docker", reason: "Not required for ordinary Codespaces development." }
   pending_capabilities: []
 notes:
-  - "minimum_version remains null until baobab-dev publishes a frontend image."
-  - "The temporary Dev Container is recorded in ADR 0003 and must be retired after that publication."
+  - "Codespaces and local Dev Containers use ghcr.io/nabhold/baobab-dev:1.2.6-frontend."
+  - "Browser-dependent CI uses the separately published 1.2.6-frontend-e2e profile."

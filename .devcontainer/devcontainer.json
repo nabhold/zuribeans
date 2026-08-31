@@ -1,10 +1,16 @@
 {
   "name": "Zuribeans",
-  "image": "mcr.microsoft.com/devcontainers/typescript-node:1-22-bookworm",
-  "postCreateCommand": "corepack enable && pnpm install --frozen-lockfile",
+  "image": "ghcr.io/nabhold/baobab-dev:1.2.6-frontend",
+  "updateContentCommand": "corepack enable && pnpm install --frozen-lockfile",
+  "postCreateCommand": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm test",
+  "waitFor": "postCreateCommand",
   "forwardPorts": [3000],
   "portsAttributes": { "3000": { "label": "Zuribeans", "onAutoForward": "openPreview" } },
-  "remoteUser": "node",
+  "remoteUser": "vscode",
+  "updateRemoteUserUID": true,
+  "init": true,
+  "hostRequirements": { "cpus": 4, "memory": "8gb", "storage": "32gb" },
+  "containerEnv": { "TZ": "Africa/Johannesburg", "NEXT_TELEMETRY_DISABLED": "1" },
   "customizations": {
     "vscode": {
       "extensions": [

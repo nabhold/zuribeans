@@ -3,11 +3,11 @@
 Copy `.env.example` to `.env.local`, supply a valid Trade Store API URL and publishable
 key, then run `pnpm install --frozen-lockfile && pnpm dev`.
 
-The repository declares Shared's `frontend` profile. That baobab-dev image has not yet
-been published and the current full image uses Node 24, outside this application's
-Medusa-compatible Node 22 range. Codespaces temporarily uses the official Node 22
-Dev Container. Replace it with the pinned baobab-dev frontend image when published.
+The repository consumes `ghcr.io/nabhold/baobab-dev:1.2.6-frontend` for GitHub
+Codespaces and compatible local Dev Containers. Browser-dependent CI uses the
+separately published `1.2.6-frontend-e2e` profile.
 
 Run `pnpm format:check`, `pnpm lint`, `pnpm typecheck`, `pnpm test` and `pnpm build`
-before submitting a change. Playwright is prepared under `tests/e2e`, but CI should add
-it only with a reachable Trade test service.
+before submitting a change. The current home-page Playwright journey is intentionally
+independent of Trade and runs in CI; Trade-backed browser journeys remain deferred until
+a controlled Trade test service is available.

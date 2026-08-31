@@ -1,0 +1,35 @@
+name: Feature request
+description: Propose a customer-facing Zuribeans capability.
+title: "feat: "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: outcome
+    attributes:
+      label: Desired outcome
+      description: Describe the buyer or business outcome.
+    validations:
+      required: true
+  - type: dropdown
+    id: ownership
+    attributes:
+      label: Architectural ownership
+      options:
+        - Zuribeans presentation or journey
+        - Baobab Trade API dependency
+        - Nabhold shared contract
+        - Nabhold infrastructure dependency
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      description: State observable completion conditions.
+    validations:
+      required: true
+  - type: textarea
+    id: risks
+    attributes:
+      label: Risks and dependencies
+      description: Note commerce-contract, privacy, security, accessibility and operational effects.
