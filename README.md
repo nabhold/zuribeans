@@ -30,3 +30,9 @@ pnpm dev
 
 See `docs/architecture.md`, `docs/development.md` and
 `docs/medusa-integration.md`.
+
+## Foundation 4
+
+Codespaces uses `ghcr.io/nabhold/baobab-dev:1.2.6-frontend`. The SHA-pinned
+Foundation gate validates contract compatibility and reproducibility and scans
+source, dependencies, secrets, configuration, and the deployable image.

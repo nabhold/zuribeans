@@ -1,10 +1,7 @@
-# Default ownership
-* @bjnabs
-
-# Delivery, contracts and integration boundaries
-/.github/ @bjnabs
-/.devcontainer/ @bjnabs
-/.nabhold/ @bjnabs
-/contracts.lock.yaml @bjnabs
-/runtime/ @bjnabs
-/src/lib/medusa/ @bjnabs
+* @nabhold/platform-engineering
+/.github/ @nabhold/platform-engineering @nabhold/security
+/.devcontainer/ @nabhold/platform-engineering
+/.nabhold/ @nabhold/platform-engineering
+/Dockerfile @nabhold/platform-engineering @nabhold/security
+/src/lib/ @nabhold/platform-engineering
+/SECURITY.md @nabhold/security
