@@ -1,5 +1,6 @@
 import Link from "next/link"
 import { loginSchema } from "@/lib/validation/login"
+import { toSafeRelativePath } from "@/lib/auth/safe-redirect"
 import { loginAction, type LoginErrorCode } from "./actions"
 
 const errorMessages: Record<LoginErrorCode, string> = {
@@ -12,10 +13,11 @@ const isLoginErrorCode = (value: string): value is LoginErrorCode => value in er
 export default async function LoginPage({
   searchParams,
 }: {
-  searchParams: Promise<{ error?: string }>
+  searchParams: Promise<{ error?: string; next?: string }>
 }) {
-  const { error } = await searchParams
+  const { error, next: rawNext } = await searchParams
   const message = error && isLoginErrorCode(error) ? errorMessages[error] : null
+  const next = toSafeRelativePath(rawNext) ?? "/account"
 
   return (
     <section className="mx-auto max-w-lg px-5 py-20">
@@ -34,6 +36,7 @@ export default async function LoginPage({
         </p>
       ) : null}
       <form action={loginAction} className="mt-10 space-y-5">
+        <input type="hidden" name="next" value={next} />
         <label className="block font-bold">
           Business email
           <input
@@ -60,9 +63,12 @@ export default async function LoginPage({
         </button>
       </form>
       <p className="mt-6 text-sm text-ink/60">
-        New buyer?{" "}
-        <Link href="/register" className="font-bold text-ink underline">
-          Create a buyer login
+        New buyer or supplier?{" "}
+        <Link
+          href={`/register?next=${encodeURIComponent(next)}`}
+          className="font-bold text-ink underline"
+        >
+          Create a Zuribeans login
         </Link>
       </p>
     </section>

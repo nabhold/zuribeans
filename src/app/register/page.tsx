@@ -1,4 +1,5 @@
 import Link from "next/link"
+import { toSafeRelativePath } from "@/lib/auth/safe-redirect"
 import { registerAction, type RegisterErrorCode } from "./actions"
 
 const errorMessages: Record<RegisterErrorCode, string> = {
@@ -12,19 +13,20 @@ const isRegisterErrorCode = (value: string): value is RegisterErrorCode => value
 export default async function RegisterPage({
   searchParams,
 }: {
-  searchParams: Promise<{ error?: string }>
+  searchParams: Promise<{ error?: string; next?: string }>
 }) {
-  const { error } = await searchParams
+  const { error, next: rawNext } = await searchParams
   const message = error && isRegisterErrorCode(error) ? errorMessages[error] : null
+  const next = toSafeRelativePath(rawNext) ?? "/account"
 
   return (
     <section className="mx-auto max-w-lg px-5 py-20">
       <p className="text-xs font-bold uppercase tracking-[0.25em] text-clay">Trade account</p>
-      <h1 className="mt-4 font-display text-5xl">Create a buyer login</h1>
+      <h1 className="mt-4 font-display text-5xl">Create a Zuribeans login</h1>
       <p className="mt-4 text-ink/60">
-        This creates your personal sign-in. It does not yet approve your organisation for trading —
-        our trade desk reviews and activates commercial access separately, and we will notify you by
-        email once that review is complete.
+        This creates your personal sign-in, used for both buyer and supplier applications. It does
+        not yet approve any organisation for trading or sourcing — our team reviews and activates
+        that separately, and we will notify you by email once that review is complete.
       </p>
       {message ? (
         <p
@@ -35,6 +37,7 @@ export default async function RegisterPage({
         </p>
       ) : null}
       <form action={registerAction} className="mt-10 space-y-5">
+        <input type="hidden" name="next" value={next} />
         <label className="block font-bold">
           Company name
           <input
@@ -105,7 +108,10 @@ export default async function RegisterPage({
       </form>
       <p className="mt-6 text-sm text-ink/60">
         Already have a login?{" "}
-        <Link href="/login" className="font-bold text-ink underline">
+        <Link
+          href={`/login?next=${encodeURIComponent(next)}`}
+          className="font-bold text-ink underline"
+        >
           Sign in
         </Link>
       </p>

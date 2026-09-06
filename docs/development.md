@@ -13,6 +13,14 @@ authenticate against; without one, form submissions redirect back with an error 
 throwing, and `/account` correctly redirects to `/login` for any visitor with no valid session.
 See `docs/adr/0005-buyer-session-storage.md`.
 
+`/supplier` and `/sourcing/become-a-supplier` require a reachable Postgres at `SUPPLIER_DB_URL`
+(estate-owned, not a Baobab engine database — see `docs/adr/0006-supplier-registration-data-ownership.md`).
+Start one locally however you prefer (`docker run -e POSTGRES_USER=zuribeans -e
+POSTGRES_PASSWORD=zuribeans_dev -e POSTGRES_DB=zuribeans_dev -p 5432:5432 postgres:16`, or a
+native install), then run `pnpm db:migrate` to apply `drizzle/`. After changing
+`src/lib/db/schema.ts`, run `pnpm db:generate` to create a new migration file and commit it
+alongside the schema change — never hand-edit a file under `drizzle/`.
+
 The repository consumes `ghcr.io/nabhold/baobab-dev:1.2.6-frontend` for GitHub
 Codespaces and compatible local Dev Containers. Browser-dependent CI uses the
 separately published `1.2.6-frontend-e2e` profile.

@@ -2,18 +2,22 @@
 
 import { redirect } from "next/navigation"
 import { createMedusaClient } from "@/lib/medusa/client"
+import { toSafeRelativePath } from "@/lib/auth/safe-redirect"
 import { loginSchema } from "@/lib/validation/login"
 
 export type LoginErrorCode = "invalid_input" | "invalid_credentials"
 
 export async function loginAction(formData: FormData): Promise<void> {
+  const next = toSafeRelativePath(formData.get("next")?.toString()) ?? "/account"
+  const nextParam = `next=${encodeURIComponent(next)}`
+
   const parsed = loginSchema.safeParse({
     email: formData.get("email"),
     password: formData.get("password"),
   })
 
   if (!parsed.success) {
-    redirect("/login?error=invalid_input")
+    redirect(`/login?error=invalid_input&${nextParam}`)
   }
 
   const sdk = createMedusaClient()
@@ -30,8 +34,8 @@ export async function loginAction(formData: FormData): Promise<void> {
   }
 
   if (!succeeded) {
-    redirect("/login?error=invalid_credentials")
+    redirect(`/login?error=invalid_credentials&${nextParam}`)
   }
 
-  redirect("/account")
+  redirect(next)
 }

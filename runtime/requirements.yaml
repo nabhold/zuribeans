@@ -25,7 +25,13 @@ environment:
     - "NEXT_PUBLIC_DEFAULT_MARKET"
   server_only:
     - "MEDUSA_BACKEND_URL"
+    - "SUPPLIER_DB_URL"
+data:
+  estate_owned_postgres:
+    purpose: "Supplier registration/qualification lifecycle (see docs/adr/0006). Not a Baobab engine database, not shared with any engine, and not authoritative for anything Trade/ERP/CMS/Control Plane already own."
+    migrations: "drizzle-kit, see drizzle/ and package.json db:migrate"
 constraints:
   - "The publishable key is storefront-visible; administrative credentials are prohibited."
-  - "No Baobab database may be accessed directly."
+  - "No Baobab (Trade/ERP/CMS/Control Plane) database may be accessed directly."
+  - "The estate-owned Postgres above is the one exception, and only for state this repo alone is authoritative for; it must never duplicate a Baobab engine's domain data."
   - "Cloud resources, DNS, certificates and secret injection belong to nabhold/infrastructure."

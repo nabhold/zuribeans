@@ -21,8 +21,21 @@ jobs:
     container:
       image: ghcr.io/nabhold/baobab-dev:1.2.6-frontend-e2e
       options: --user 0
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: zuribeans
+          POSTGRES_PASSWORD: zuribeans_ci
+          POSTGRES_DB: zuribeans_ci
+        options: >-
+          --health-cmd "pg_isready -U zuribeans"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
     env:
       PLAYWRIGHT_BROWSERS_PATH: /root/.cache/ms-playwright
+      SUPPLIER_DB_URL: postgres://zuribeans:zuribeans_ci@postgres:5432/zuribeans_ci
     steps:
       - name: Checkout source
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -34,6 +47,8 @@ jobs:
         run: pnpm lint
       - name: Type-check
         run: pnpm typecheck
+      - name: Run supplier database migrations
+        run: pnpm db:migrate
       - name: Unit tests
         run: pnpm test
       - name: Build

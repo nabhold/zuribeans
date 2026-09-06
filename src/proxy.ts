@@ -6,6 +6,7 @@ import {
   MARKET_HEADER_NAME,
 } from "@/lib/market/constants"
 import { resolveActiveMarket } from "@/lib/market/context"
+import { PATHNAME_HEADER_NAME } from "@/lib/http/constants"
 
 /**
  * Resolves the explicit Baobab market context for every request (see
@@ -29,6 +30,7 @@ export function proxy(request: NextRequest) {
   const requestHeaders = new Headers(request.headers)
   requestHeaders.set(MARKET_HEADER_NAME, activeMarket)
   requestHeaders.set(CORRELATION_HEADER_NAME, correlationId)
+  requestHeaders.set(PATHNAME_HEADER_NAME, request.nextUrl.pathname)
 
   const response = NextResponse.next({ request: { headers: requestHeaders } })
   response.headers.set(CORRELATION_HEADER_NAME, correlationId)

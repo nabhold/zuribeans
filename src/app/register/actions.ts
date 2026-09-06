@@ -3,6 +3,7 @@
 import { redirect } from "next/navigation"
 import { FetchError } from "@medusajs/js-sdk"
 import { createMedusaClient } from "@/lib/medusa/client"
+import { toSafeRelativePath } from "@/lib/auth/safe-redirect"
 import { registerSchema } from "@/lib/validation/register"
 
 export type RegisterErrorCode = "invalid_input" | "email_taken" | "failed"
@@ -11,6 +12,9 @@ const isDuplicateIdentityError = (error: unknown): boolean =>
   error instanceof FetchError && error.status === 422
 
 export async function registerAction(formData: FormData): Promise<void> {
+  const next = toSafeRelativePath(formData.get("next")?.toString()) ?? "/account"
+  const nextParam = `next=${encodeURIComponent(next)}`
+
   const parsed = registerSchema.safeParse({
     email: formData.get("email"),
     password: formData.get("password"),
@@ -21,7 +25,7 @@ export async function registerAction(formData: FormData): Promise<void> {
   })
 
   if (!parsed.success) {
-    redirect("/register?error=invalid_input")
+    redirect(`/register?error=invalid_input&${nextParam}`)
   }
 
   const { email, password, firstName, lastName, companyName } = parsed.data
@@ -47,8 +51,8 @@ export async function registerAction(formData: FormData): Promise<void> {
   }
 
   if (outcome !== "ok") {
-    redirect(`/register?error=${outcome}`)
+    redirect(`/register?error=${outcome}&${nextParam}`)
   }
 
-  redirect("/account")
+  redirect(next)
 }
