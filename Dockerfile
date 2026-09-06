@@ -1,5 +1,7 @@
-FROM node:26.8.1-trixie-slim AS dependencies
+FROM node:24.20.0-alpine3.24 AS dependencies
 WORKDIR /app
+# Next.js documents libc6-compat as needed on Alpine for some native dependencies.
+RUN apk add --no-cache libc6-compat
 RUN npm install --global corepack@latest && corepack enable
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml .npmrc ./
 RUN pnpm install --frozen-lockfile
@@ -18,7 +20,7 @@ ENV NEXT_PUBLIC_ENABLED_MARKETS=$NEXT_PUBLIC_ENABLED_MARKETS
 ENV NEXT_PUBLIC_DEFAULT_MARKET=$NEXT_PUBLIC_DEFAULT_MARKET
 RUN pnpm build
 
-FROM node:26.8.1-trixie-slim AS runtime
+FROM node:24.20.0-alpine3.24 AS runtime
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 WORKDIR /app
@@ -27,7 +29,8 @@ WORKDIR /app
 # Trivy scans in the runtime image.
 RUN rm -rf /usr/local/lib/node_modules/npm /usr/local/lib/node_modules/corepack \
     /usr/local/bin/npm /usr/local/bin/npx /usr/local/bin/corepack
-RUN useradd --create-home --uid 10001 nextjs
+RUN addgroup --system --gid 10001 nextjs && \
+    adduser --system --uid 10001 --ingroup nextjs nextjs
 COPY --from=build --chown=nextjs:nextjs /app/.next/standalone ./
 COPY --from=build --chown=nextjs:nextjs /app/.next/static ./.next/static
 USER nextjs
