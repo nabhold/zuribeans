@@ -22,6 +22,11 @@ FROM node:24.20.0-bookworm-slim AS runtime
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 WORKDIR /app
+# The standalone server only ever runs `node server.js` and never needs npm/npx/corepack;
+# drop them (and their bundled tar/ip-address/brace-expansion) to shrink the CVE surface
+# Trivy scans in the runtime image.
+RUN rm -rf /usr/local/lib/node_modules/npm /usr/local/lib/node_modules/corepack \
+    /usr/local/bin/npm /usr/local/bin/npx /usr/local/bin/corepack
 RUN useradd --create-home --uid 10001 nextjs
 COPY --from=build --chown=nextjs:nextjs /app/.next/standalone ./
 COPY --from=build --chown=nextjs:nextjs /app/.next/static ./.next/static
