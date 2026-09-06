@@ -1,4 +1,4 @@
-FROM node:22.14.0-bookworm-slim AS dependencies
+FROM node:26.8.1-bookworm-slim AS dependencies
 WORKDIR /app
 RUN corepack enable
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml .npmrc ./
@@ -18,7 +18,7 @@ ENV NEXT_PUBLIC_ENABLED_MARKETS=$NEXT_PUBLIC_ENABLED_MARKETS
 ENV NEXT_PUBLIC_DEFAULT_MARKET=$NEXT_PUBLIC_DEFAULT_MARKET
 RUN pnpm build
 
-FROM node:22.14.0-bookworm-slim AS runtime
+FROM node:26.8.1-bookworm-slim AS runtime
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 WORKDIR /app
