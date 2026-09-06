@@ -38,6 +38,27 @@ hardcoded into a component. `src/lib/market/markets.ts` mirrors the exact candid
 `marketKey`s Trade already bootstraps (`zuribeans_ug`, `zuribeans_za`) rather than inventing a
 parallel identifier; see the gap this still leaves open below.
 
+## Buyer identity
+
+Authentication uses Medusa's native customer identity (see
+`docs/adr/0005-buyer-session-storage.md`) — there is no separate Zuribeans identity store.
+`src/app/register` creates a Medusa customer (email, password, name, `company_name`) via
+`sdk.auth.register` + `sdk.store.customer.create` + `sdk.auth.login`, following Medusa's
+documented registration sequence exactly. `src/app/login` authenticates with `sdk.auth.login`.
+Both persist the resulting JWT through `src/lib/auth/session-storage.ts`, a `CustomStorage`
+adapter backed by an httpOnly, secure, `SameSite=lax` cookie — the token never reaches
+client-side JavaScript. `src/app/account` is a protected layout: `getCurrentCustomer()`
+(`src/lib/auth/customer.ts`) resolves the signed-in customer from that cookie, or `null` on any
+failure (no session, expired token, Trade unreachable), and the layout redirects to `/login`
+when it is `null`.
+
+Signing in is deliberately not the same as being an approved trading account: the `/account`
+dashboard states plainly that catalogue pricing, quotations, orders, shipments and invoices
+unlock only once a buyer organisation is reviewed and approved — a workflow this repository
+does not yet implement, because it needs the company/approval-flow contracts Trade has not
+published (see the gaps below). Do not wire pricing, quoting or ordering to a merely
+authenticated customer.
+
 ## Remaining upstream gaps (see `contracts.lock.yaml`)
 
 - Trade has not published company accounts, quotation, saved-list or approval-flow contracts,
