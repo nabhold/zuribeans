@@ -21,7 +21,8 @@ environment:
   public:
     - "NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY"
     - "NEXT_PUBLIC_SITE_URL"
-    - "NEXT_PUBLIC_MARKET"
+    - "NEXT_PUBLIC_ENABLED_MARKETS"
+    - "NEXT_PUBLIC_DEFAULT_MARKET"
   server_only:
     - "MEDUSA_BACKEND_URL"
 constraints:

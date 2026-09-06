@@ -7,14 +7,17 @@ consumer:
 sources:
   shared:
     repository: "nabhold/shared"
-    commit: "498c431ea7eb76eb038975bc49e7087499d30d48"
+    commit: "6e0059989a45ee189b98df6ce1a430c83829049c"
     legal_entity_registry: "contracts/legal-entity/registry.yaml"
     development_environment: "contracts/development-environment/schema.yaml"
   trade:
     repository: "nabhold/baobab-trade"
-    commit: "d5aa34bdcbb99f4dac6b55321ef2e7eaeeb9e17a"
+    commit: "bd4074c050183cdca4f3831d9e47524c26a4677e"
     api: "Medusa v2 Store API"
 gaps:
-  - "Shared currently classifies Zuribeans as B2C/Astro; current approved direction is B2B/Next.js."
   - "Shared has not published a canonical commerce Store API package."
-  - "Trade has not published company accounts, quotations, saved lists or approval-flow contracts."
+  - "Trade has not published company accounts, quotations, saved lists or approval-flow contracts (ADR-0017 describes the intended model; no API/schema is published yet)."
+  - "Control Plane (`nabhold/baobab-cp`) has only a stub `estate.digital_estate` table (tenant_id, name, domain, status); it does not yet model business_model, markets or capability bindings for a Digital Estate (see docs/reconciliation/canonical-contract-matrix.md, row DigitalEstate, action P3: confirm scope with an ADR first)."
+  - "Control Plane's `market.market` table exists but is unimplemented (no Go type, no API); Zuribeans' zuribeans_ug/zuribeans_za market keys (src/lib/market/markets.ts) are candidates mirroring Trade's own bootstrap config, not yet registered, canonical Market records."
+notes:
+  - "Resolved: shared's ADR-0001 now classifies Zuribeans as B2B/Next.js (contracts/legal-entity/registry.yaml `ZURIBEANS.business_model: B2B`, `digital_estate.status: active`); the organisational mismatch this repo previously recorded no longer exists upstream."

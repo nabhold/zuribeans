@@ -41,7 +41,8 @@ jobs:
           MEDUSA_BACKEND_URL: http://localhost:9000
           NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY: pk_ci_build_only
           NEXT_PUBLIC_SITE_URL: http://localhost:3000
-          NEXT_PUBLIC_MARKET: za
+          NEXT_PUBLIC_ENABLED_MARKETS: zuribeans_ug,zuribeans_za
+          NEXT_PUBLIC_DEFAULT_MARKET: zuribeans_za
         run: pnpm build
       - name: End-to-end tests
         env:
@@ -49,7 +50,8 @@ jobs:
           MEDUSA_BACKEND_URL: http://localhost:9000
           NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY: pk_ci_e2e_only
           NEXT_PUBLIC_SITE_URL: http://127.0.0.1:3000
-          NEXT_PUBLIC_MARKET: za
+          NEXT_PUBLIC_ENABLED_MARKETS: zuribeans_ug,zuribeans_za
+          NEXT_PUBLIC_DEFAULT_MARKET: zuribeans_za
         run: pnpm test:e2e
       - name: Validate architecture declarations
         run: test -f contracts.lock.yaml && test -f runtime/requirements.yaml && test -f .nabhold/environment.yaml
@@ -66,5 +68,6 @@ jobs:
           --build-arg MEDUSA_BACKEND_URL=http://localhost:9000
           --build-arg NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY=pk_ci_build_only
           --build-arg NEXT_PUBLIC_SITE_URL=http://localhost:3000
-          --build-arg NEXT_PUBLIC_MARKET=za
+          --build-arg NEXT_PUBLIC_ENABLED_MARKETS=zuribeans_ug,zuribeans_za
+          --build-arg NEXT_PUBLIC_DEFAULT_MARKET=zuribeans_za
           --tag zuribeans:test .

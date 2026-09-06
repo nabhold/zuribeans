@@ -22,15 +22,30 @@ const toCard = (product: MedusaProduct): ProductCardModel => ({
   origin: typeof product.metadata?.origin === "string" ? product.metadata.origin : null,
 })
 
-export const listProducts = async (): Promise<ProductCardModel[]> => {
+export type MarketPricingContext = {
+  /** ISO 3166-1 alpha-2. Lower-cased for Medusa at this boundary only. */
+  countryCode: string
+}
+
+export const listProducts = async (context?: MarketPricingContext): Promise<ProductCardModel[]> => {
   const sdk = createMedusaClient()
-  const { products } = await sdk.store.product.list({ limit: 24 })
+  const { products } = await sdk.store.product.list({
+    limit: 24,
+    ...(context ? { country_code: context.countryCode.toLowerCase() } : {}),
+  })
   return (products as MedusaProduct[]).map(toCard)
 }
 
-export const retrieveProduct = async (handle: string): Promise<ProductDetailModel | null> => {
+export const retrieveProduct = async (
+  handle: string,
+  context?: MarketPricingContext,
+): Promise<ProductDetailModel | null> => {
   const sdk = createMedusaClient()
-  const { products } = await sdk.store.product.list({ handle, limit: 1 })
+  const { products } = await sdk.store.product.list({
+    handle,
+    limit: 1,
+    ...(context ? { country_code: context.countryCode.toLowerCase() } : {}),
+  })
   const product = (products as MedusaProduct[])[0]
   if (!product) return null
   return {
