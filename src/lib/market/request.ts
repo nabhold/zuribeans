@@ -1,6 +1,6 @@
 import "server-only"
 import { headers } from "next/headers"
-import { getPublicEnvironment } from "@/lib/configuration/environment"
+import { getMarketEnvironment } from "@/lib/configuration/environment"
 import { MARKET_HEADER_NAME } from "./constants"
 import { getMarket, isZuribeansMarketKey, ZURIBEANS_MARKETS, type ZuribeansMarket } from "./markets"
 
@@ -17,7 +17,7 @@ export type MarketContext = {
  * market the response headers and page markup will agree on.
  */
 export const getMarketContext = async (): Promise<MarketContext> => {
-  const env = getPublicEnvironment()
+  const env = getMarketEnvironment()
   const headerList = await headers()
   const headerValue = headerList.get(MARKET_HEADER_NAME)
   const marketKey =

@@ -42,10 +42,16 @@ const defaultMarketSchema = z
   })
   .transform((value) => value as ZuribeansMarketKey)
 
-const publicSchema = z
+/**
+ * Market resolution (the root layout, on every page, via
+ * src/lib/market/request.ts) must not require Medusa credentials to be
+ * configured — a marketing page has no Medusa dependency, and the Foundation
+ * image-build gate (nabhold/shared's reusable workflow) builds this
+ * Dockerfile with no build-args at all, relying on ARG defaults only. Keep
+ * this schema independent of `publicSchema` below rather than folding it in.
+ */
+const marketSchema = z
   .object({
-    NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY: z.string().min(1),
-    NEXT_PUBLIC_SITE_URL: z.string().url(),
     NEXT_PUBLIC_ENABLED_MARKETS: enabledMarketsSchema,
     NEXT_PUBLIC_DEFAULT_MARKET: defaultMarketSchema,
   })
@@ -54,11 +60,19 @@ const publicSchema = z
     path: ["NEXT_PUBLIC_DEFAULT_MARKET"],
   })
 
+const publicSchema = z
+  .object({
+    NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY: z.string().min(1),
+    NEXT_PUBLIC_SITE_URL: z.string().url(),
+  })
+  .and(marketSchema)
+
 const serverSchema = z
   .object({
     MEDUSA_BACKEND_URL: z.string().url(),
   })
   .and(publicSchema)
 
+export const getMarketEnvironment = () => marketSchema.parse(process.env)
 export const getPublicEnvironment = () => publicSchema.parse(process.env)
 export const getServerEnvironment = () => serverSchema.parse(process.env)

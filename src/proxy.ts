@@ -1,5 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server"
-import { getPublicEnvironment } from "@/lib/configuration/environment"
+import { getMarketEnvironment } from "@/lib/configuration/environment"
 import {
   CORRELATION_HEADER_NAME,
   MARKET_COOKIE_NAME,
@@ -15,7 +15,7 @@ import { resolveActiveMarket } from "@/lib/market/context"
  * proxy only threads them through Server Components and structured logs.
  */
 export function proxy(request: NextRequest) {
-  const env = getPublicEnvironment()
+  const env = getMarketEnvironment()
 
   const activeMarket = resolveActiveMarket({
     requested: request.nextUrl.searchParams.get("market"),
