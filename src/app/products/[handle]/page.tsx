@@ -1,11 +1,13 @@
 import { notFound } from "next/navigation"
 import { retrieveProduct } from "@/lib/medusa/products"
+import { getMarketContext } from "@/lib/market/request"
 
 export const dynamic = "force-dynamic"
 
 export default async function ProductPage({ params }: { params: Promise<{ handle: string }> }) {
   const { handle } = await params
-  const product = await retrieveProduct(handle)
+  const { active: market } = await getMarketContext()
+  const product = await retrieveProduct(handle, { countryCode: market.countryCode })
   if (!product) notFound()
   return (
     <article className="mx-auto grid max-w-7xl gap-12 px-5 py-16 lg:grid-cols-2 lg:px-8">

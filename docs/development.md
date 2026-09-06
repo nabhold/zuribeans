@@ -3,6 +3,11 @@
 Copy `.env.example` to `.env.local`, supply a valid Trade Store API URL and publishable
 key, then run `pnpm install --frozen-lockfile && pnpm dev`.
 
+`NEXT_PUBLIC_ENABLED_MARKETS` and `NEXT_PUBLIC_DEFAULT_MARKET` control which markets this
+deployment serves (see `docs/adr/0004-market-context-resolution.md`); both must use the
+candidate market keys in `src/lib/market/markets.ts` (`zuribeans_ug`, `zuribeans_za`). Visit
+`/?market=zuribeans_ug` locally to switch markets — the choice persists in a `zb_market` cookie.
+
 The repository consumes `ghcr.io/nabhold/baobab-dev:1.2.6-frontend` for GitHub
 Codespaces and compatible local Dev Containers. Browser-dependent CI uses the
 separately published `1.2.6-frontend-e2e` profile.

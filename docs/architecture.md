@@ -26,8 +26,29 @@ orders must be used first. Company hierarchies, quotation workflows, saved lists
 approval and credit terms require Trade contracts before frontend implementation. ERP
 documents normally flow through Trade rather than direct browser-to-ERP calls.
 
-## Known organisational mismatch
+## Market context
 
-Shared ADR-0001 describes Zuribeans as B2C/Astro. The current approved direction is B2B and
-Next.js. Shared must be amended through its governance process; this repository records the
-mismatch rather than claiming it does not exist.
+Zuribeans supports Uganda and South Africa from the outset (see
+`docs/adr/0004-market-context-resolution.md`). `src/proxy.ts` resolves one active market per
+request — an explicit `?market=` query param, then the visitor's `zb_market` cookie, then the
+deployment's configured default (`NEXT_PUBLIC_DEFAULT_MARKET`) — and exposes it to Server
+Components via `src/lib/market/request.ts`. The resolved market's `countryCode` is passed to
+Medusa's Store API as pricing context (`country_code`); nothing about a market is ever
+hardcoded into a component. `src/lib/market/markets.ts` mirrors the exact candidate
+`marketKey`s Trade already bootstraps (`zuribeans_ug`, `zuribeans_za`) rather than inventing a
+parallel identifier; see the gap this still leaves open below.
+
+## Remaining upstream gaps (see `contracts.lock.yaml`)
+
+- Trade has not published company accounts, quotation, saved-list or approval-flow contracts,
+  so buyer organisations, RFQs and contract pricing remain out of scope here until they exist.
+- Control Plane has not registered or activated real Market records, so the market keys above
+  are candidates pinned to Trade's own bootstrap config, not resolved `market_id`s. Reconcile
+  them once Control Plane's `market.market` table is implemented.
+- Control Plane's Digital Estate representation is a stub (tenant/name/domain/status only);
+  richer estate registration (business model, markets, capability bindings) needs an ADR in
+  `nabhold/baobab-cp` before this repository can consume it.
+
+The organisational classification mismatch this document used to record (Shared ADR-0001
+describing Zuribeans as B2C/Astro) has been resolved upstream: Shared now classifies Zuribeans
+as B2B/Next.js in both ADR-0001 and `contracts/legal-entity/registry.yaml`.
