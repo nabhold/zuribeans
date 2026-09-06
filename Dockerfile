@@ -24,6 +24,8 @@ FROM node:24.20.0-alpine3.24 AS runtime
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 WORKDIR /app
+# Pick up patched apk packages (e.g. openssl) released after this base image was built.
+RUN apk upgrade --no-cache
 # The standalone server only ever runs `node server.js` and never needs npm/npx/corepack;
 # drop them (and their bundled tar/ip-address/brace-expansion) to shrink the CVE surface
 # Trivy scans in the runtime image.
