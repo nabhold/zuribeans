@@ -12,6 +12,7 @@ export function SiteHeader({ marketContext }: { marketContext: MarketContext }) 
         <nav aria-label="Primary navigation" className="hidden gap-8 text-sm font-medium md:flex">
           <Link href="/products">Green coffee</Link>
           <Link href="/about">Our origin</Link>
+          <Link href="/sourcing/become-a-supplier">Become a supplier</Link>
           <Link href="/contact">Trade enquiries</Link>
         </nav>
         <div className="flex items-center gap-4 text-sm font-semibold">
