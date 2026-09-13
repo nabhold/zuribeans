@@ -110,7 +110,7 @@ export default async function HomePage() {
                   {productClass.description}
                 </p>
                 <p className="relative mt-8 font-semibold text-clay">
-                  View catalogue <span aria-hidden="true">→</span>
+                  {productClass.actionLabel} <span aria-hidden="true">→</span>
                 </p>
               </Card>
             </Link>
