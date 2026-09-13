@@ -4,6 +4,11 @@ import { cookies } from "next/headers"
 const SESSION_COOKIE_NAME = "zb_session"
 const SESSION_MAX_AGE_SECONDS = 60 * 60 * 24 * 7
 
+export const hasCustomerSession = async (): Promise<boolean> => {
+  const store = await cookies()
+  return store.has(SESSION_COOKIE_NAME)
+}
+
 /**
  * Backs the Medusa SDK's JWT storage with an httpOnly cookie instead of
  * browser storage, so the customer session token never reaches client-side

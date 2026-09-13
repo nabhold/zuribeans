@@ -1,23 +1,36 @@
-import Link from "next/link"
-import type { MarketContext } from "@/lib/market/request"
+"use client"
 
-export function MarketSwitcher({ marketContext }: { marketContext: MarketContext }) {
+import Link from "next/link"
+import { usePathname } from "next/navigation"
+import type { MarketContext } from "@/lib/market/request"
+import { classNames } from "@/lib/ui/classnames"
+
+export function MarketSwitcher({
+  marketContext,
+  className,
+}: {
+  marketContext: MarketContext
+  className?: string
+}) {
+  const pathname = usePathname()
   const otherMarkets = marketContext.enabled.filter(
     (market) => market.marketKey !== marketContext.active.marketKey,
   )
 
   return (
-    <div className="hidden items-center gap-2 text-xs font-semibold uppercase tracking-wide text-ink/50 lg:flex">
-      <span>
-        {marketContext.active.displayName} · {marketContext.active.currency}
+    <div className={classNames("flex flex-wrap items-center gap-2 text-sm", className)}>
+      <span className="font-semibold text-muted-strong">
+        {marketContext.active.displayName} <span aria-hidden="true">·</span>{" "}
+        {marketContext.active.currency}
       </span>
       {otherMarkets.map((market) => (
         <Link
           key={market.marketKey}
-          href={`?market=${market.marketKey}`}
-          className="underline decoration-dotted underline-offset-4 hover:text-ink"
+          href={`${pathname}?market=${market.marketKey}`}
+          className="font-semibold text-clay underline decoration-dotted underline-offset-4 hover:text-ink"
         >
-          Switch to {market.displayName}
+          {market.displayName}
+          <span className="sr-only"> market</span>
         </Link>
       ))}
     </div>
