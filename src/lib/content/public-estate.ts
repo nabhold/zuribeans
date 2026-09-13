@@ -5,6 +5,7 @@ export type PublicProductClass = {
   description: string
   href: string
   eyebrow: string
+  actionLabel: string
 }
 
 export const PUBLIC_PRODUCT_CLASSES: readonly PublicProductClass[] = [
@@ -14,6 +15,7 @@ export const PUBLIC_PRODUCT_CLASSES: readonly PublicProductClass[] = [
       "Arabica, Robusta and specialty lots presented with origin and trade specifications.",
     href: "/products?category=coffee",
     eyebrow: "Core product class",
+    actionLabel: "View the catalogue",
   },
   {
     name: "Vanilla pods",
@@ -21,6 +23,7 @@ export const PUBLIC_PRODUCT_CLASSES: readonly PublicProductClass[] = [
       "Commercial vanilla supply with origin, grade and capacity information where published.",
     href: "/products?category=vanilla",
     eyebrow: "Growing product class",
+    actionLabel: "View the catalogue",
   },
 ]
 
