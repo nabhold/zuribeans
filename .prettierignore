@@ -3,3 +3,5 @@ node_modules
 pnpm-lock.yaml
 playwright-report
 drizzle/meta
+# Imported programme source of truth; preserve its authored diagrams and table layout.
+docs/adr/ZuriBeans Go-Live Implementation Plan — Multi-Market B2B Cross-Border Trading.md
