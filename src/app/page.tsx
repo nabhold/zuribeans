@@ -110,7 +110,7 @@ export default async function HomePage() {
                   {productClass.description}
                 </p>
                 <p className="relative mt-8 font-semibold text-clay">
-                  View catalogue <span aria-hidden="true">→</span>
+                  {productClass.actionLabel} <span aria-hidden="true">→</span>
                 </p>
               </Card>
             </Link>
@@ -150,10 +150,10 @@ export default async function HomePage() {
                   </div>
                   <p className="mt-5 max-w-xl leading-7 text-white/65">{summary.summary}</p>
                   <Link
-                    href={`/origins-markets?market=${summary.marketKey}`}
+                    href="/about"
                     className="mt-7 inline-block font-semibold text-white underline decoration-clay underline-offset-4"
                   >
-                    Explore this market
+                    About ZuriBeans
                   </Link>
                 </article>
               )
@@ -186,8 +186,8 @@ export default async function HomePage() {
               title="Confidence is built from evidence."
               description="Procurement teams need useful specifications, provenance and verification status—not vague claims. ZuriBeans presents what is known, distinguishes declarations from verification, and keeps sensitive terms behind authorization."
             />
-            <ButtonLink href="/quality-traceability" variant="outline" className="mt-8">
-              How quality is represented
+            <ButtonLink href="/about" variant="outline" className="mt-8">
+              Our operating principles
             </ButtonLink>
           </div>
           <dl className="grid gap-px overflow-hidden rounded-panel border border-line bg-line sm:grid-cols-2">
