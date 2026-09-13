@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useRef, type ReactNode } from "react"
+import { useEffect, useId, useRef, type ReactNode } from "react"
 import { Button } from "./button"
 
 export function Dialog({
@@ -17,6 +17,8 @@ export function Dialog({
   onClose: () => void
 }) {
   const ref = useRef<HTMLDialogElement>(null)
+  const titleId = useId()
+  const descriptionId = useId()
 
   useEffect(() => {
     const dialog = ref.current
@@ -28,8 +30,8 @@ export function Dialog({
   return (
     <dialog
       ref={ref}
-      aria-labelledby="dialog-title"
-      aria-describedby={description ? "dialog-description" : undefined}
+      aria-labelledby={titleId}
+      aria-describedby={description ? descriptionId : undefined}
       onClose={onClose}
       onCancel={onClose}
       className="w-[min(36rem,calc(100%-2rem))] rounded-panel bg-surface p-0 text-ink shadow-overlay backdrop:bg-ink/60"
@@ -37,11 +39,11 @@ export function Dialog({
       <div className="p-6 md:p-8">
         <div className="flex items-start justify-between gap-6">
           <div>
-            <h2 id="dialog-title" className="font-display text-2xl">
+            <h2 id={titleId} className="font-display text-2xl">
               {title}
             </h2>
             {description ? (
-              <p id="dialog-description" className="mt-2 text-sm leading-6 text-muted">
+              <p id={descriptionId} className="mt-2 text-sm leading-6 text-muted">
                 {description}
               </p>
             ) : null}

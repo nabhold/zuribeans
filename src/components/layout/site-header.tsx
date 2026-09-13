@@ -1,26 +1,71 @@
 import Link from "next/link"
 import { MarketSwitcher } from "./market-switcher"
 import type { MarketContext } from "@/lib/market/request"
+import { ButtonLink } from "@/components/ui/button"
+import { MobileNavigation, type NavigationItem } from "@/components/navigation/mobile-navigation"
 
-export function SiteHeader({ marketContext }: { marketContext: MarketContext }) {
+const primaryNavigation: readonly NavigationItem[] = [
+  { href: "/products", label: "Products" },
+  { href: "/origins-markets", label: "Origins & Markets" },
+  { href: "/sourcing", label: "Sourcing" },
+  { href: "/trade", label: "Trade" },
+  { href: "/quality-traceability", label: "Quality & Traceability" },
+  { href: "/about", label: "About" },
+  { href: "/contact", label: "Contact" },
+]
+
+export function SiteHeader({
+  marketContext,
+  hasSession,
+}: {
+  marketContext: MarketContext
+  hasSession: boolean
+}) {
   return (
-    <header className="border-b border-ink/10 bg-canvas/95">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-5 lg:px-8">
-        <Link href="/" className="font-display text-2xl font-semibold tracking-tight">
-          ZURIBEANS<span className="text-clay">.</span>
+    <header className="sticky top-0 z-40 border-b border-line bg-canvas/95 backdrop-blur supports-[backdrop-filter]:bg-canvas/85">
+      <div className="page-container flex min-h-20 items-center gap-5">
+        <Link
+          href="/"
+          className="shrink-0 font-display text-2xl font-semibold tracking-tight"
+          aria-label="ZuriBeans home"
+        >
+          ZURIBEANS
+          <span className="text-clay" aria-hidden="true">
+            .
+          </span>
         </Link>
-        <nav aria-label="Primary navigation" className="hidden gap-8 text-sm font-medium md:flex">
-          <Link href="/products">Green coffee</Link>
-          <Link href="/about">Our origin</Link>
-          <Link href="/sourcing/become-a-supplier">Become a supplier</Link>
-          <Link href="/contact">Trade enquiries</Link>
+        <nav
+          aria-label="Primary navigation"
+          className="ml-auto hidden items-center gap-5 text-sm font-semibold xl:flex"
+        >
+          {primaryNavigation.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className="whitespace-nowrap text-muted-strong hover:text-clay"
+            >
+              {item.label}
+            </Link>
+          ))}
         </nav>
-        <div className="flex items-center gap-4 text-sm font-semibold">
-          <MarketSwitcher marketContext={marketContext} />
-          <Link href="/login">Buyer login</Link>
-          <Link href="/products" className="rounded-full bg-ink px-5 py-3 text-white">
-            View lots
+        <div className="ml-auto hidden items-center gap-5 xl:flex">
+          <MarketSwitcher marketContext={marketContext} className="max-w-64 justify-end" />
+          <Link
+            href={hasSession ? "/account" : "/login"}
+            className="whitespace-nowrap text-sm font-semibold hover:text-clay"
+          >
+            {hasSession ? "Account" : "Portal sign in"}
           </Link>
+          <ButtonLink href="/products" size="sm">
+            Explore products
+          </ButtonLink>
+        </div>
+        <div className="ml-auto xl:hidden">
+          <MobileNavigation
+            items={primaryNavigation}
+            marketContext={marketContext}
+            hasSession={hasSession}
+          />
         </div>
       </div>
     </header>
