@@ -1,47 +1,250 @@
+import type { Metadata } from "next"
+import Image from "next/image"
 import Link from "next/link"
+import { ButtonLink } from "@/components/ui/button"
+import { Card } from "@/components/ui/card"
+import { SectionHeading } from "@/components/marketing/section-heading"
+import { getMarketContext } from "@/lib/market/request"
+import { getMarket } from "@/lib/market/markets"
+import {
+  PUBLIC_MARKET_SUMMARIES,
+  PUBLIC_PRODUCT_CLASSES,
+  TRADE_STEPS,
+} from "@/lib/content/public-estate"
 
-const assurances = ["Traceable lots", "Commercial documentation", "Roaster-ready logistics"]
+export const metadata: Metadata = {
+  title: "African products, traded with rigour",
+  description:
+    "ZuriBeans connects professional buyers and qualified suppliers through disciplined sourcing, quality information and cross-border trade capability.",
+}
 
-export default function HomePage() {
+const assurances = [
+  ["Origin", "Product information connected to where and how supply begins."],
+  ["Quality", "Specifications and verification presented for professional decisions."],
+  ["Trade", "Commercial and operational steps handled as one accountable journey."],
+] as const
+
+export default async function HomePage() {
+  const { active: market } = await getMarketContext()
+
   return (
     <>
-      <section className="mx-auto grid max-w-7xl gap-10 px-5 py-16 lg:grid-cols-[1.15fr_.85fr] lg:px-8 lg:py-24">
-        <div>
-          <p className="text-xs font-bold uppercase tracking-[0.25em] text-clay">
-            African origin. Trade rigour.
-          </p>
-          <h1 className="mt-6 max-w-4xl font-display text-6xl leading-[0.98] tracking-tight md:text-8xl">
-            Coffee with a clear line back to the source.
+      <section className="page-container grid items-center gap-10 py-12 lg:grid-cols-[0.9fr_1.1fr] lg:py-20">
+        <div className="relative z-10 lg:py-10">
+          <p className="eyebrow">African origin. Trade rigour.</p>
+          <h1 className="mt-6 max-w-3xl font-display text-5xl leading-[0.98] tracking-tight text-balance sm:text-6xl lg:text-7xl">
+            Quality products. Clear provenance. Serious trade.
           </h1>
-          <p className="mt-8 max-w-2xl text-lg leading-8 text-ink/65">
-            Zuribeans connects professional buyers with traceable African coffees, practical lot
-            information and dependable trade support.
+          <p className="mt-7 max-w-2xl text-lg leading-8 text-muted">
+            ZuriBeans connects professional buyers and qualified suppliers through disciplined
+            sourcing, useful product information and cross-border capability built for repeat
+            business.
           </p>
-          <div className="mt-10 flex flex-wrap gap-4">
-            <Link href="/products" className="rounded-full bg-clay px-7 py-4 font-bold text-white">
-              Explore available lots
-            </Link>
-            <Link href="/contact" className="rounded-full border border-ink/20 px-7 py-4 font-bold">
-              Discuss your programme
-            </Link>
+          <div className="mt-9 flex flex-wrap gap-3">
+            <ButtonLink href="/products" size="lg">
+              Explore products
+            </ButtonLink>
+            <ButtonLink href="/contact" variant="outline" size="lg">
+              Discuss a requirement
+            </ButtonLink>
+          </div>
+          <div className="mt-8 flex items-center gap-3 text-sm text-muted">
+            <span className="size-2 rounded-full bg-success" aria-hidden="true" />
+            Viewing the {market.displayName} market in {market.currency}
           </div>
         </div>
-        <div className="relative min-h-[28rem] overflow-hidden rounded-[2.5rem] bg-[radial-gradient(circle_at_30%_25%,#e9bb83,transparent_25%),radial-gradient(circle_at_70%_70%,#7f946d,transparent_30%),linear-gradient(150deg,#172219,#526a4f)]">
-          <div className="absolute bottom-8 left-8 right-8 rounded-3xl border border-white/20 bg-white/10 p-6 text-white backdrop-blur">
-            <p className="text-xs font-bold uppercase tracking-[0.2em]">Built for trade buyers</p>
-            <p className="mt-3 font-display text-3xl">From sample request to repeat order.</p>
+        <div className="relative min-h-[30rem] overflow-hidden rounded-[2rem] bg-ink shadow-panel sm:min-h-[36rem]">
+          <Image
+            src="/images/zuribeans-origin-trade-hero.webp"
+            alt="Green coffee beans, vanilla pods and export-ready sacks at an East African processing facility"
+            fill
+            priority
+            sizes="(min-width: 1024px) 55vw, 100vw"
+            className="object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-ink/75 via-transparent to-transparent" />
+          <div className="absolute inset-x-5 bottom-5 rounded-panel border border-white/20 bg-ink/70 p-5 text-white backdrop-blur-sm sm:inset-x-7 sm:bottom-7 sm:p-6">
+            <p className="text-xs font-bold uppercase tracking-[0.16em] text-white/70">
+              Built for procurement
+            </p>
+            <p className="mt-2 max-w-xl font-display text-2xl sm:text-3xl">
+              From a defined requirement to accountable delivery.
+            </p>
           </div>
         </div>
       </section>
-      <section className="border-y border-ink/10 bg-white/40">
-        <div className="mx-auto grid max-w-7xl gap-6 px-5 py-10 md:grid-cols-3 lg:px-8">
-          {assurances.map((item, index) => (
-            <p key={item} className="font-display text-xl">
-              <span className="mr-3 text-clay">0{index + 1}</span>
-              {item}
-            </p>
+
+      <section className="border-y border-line bg-surface-raised">
+        <div className="page-container grid divide-y divide-line md:grid-cols-3 md:divide-x md:divide-y-0">
+          {assurances.map(([title, description], index) => (
+            <div key={title} className="py-7 md:px-7 md:first:pl-0 md:last:pr-0">
+              <p className="flex items-center gap-3 font-display text-xl">
+                <span className="text-clay">0{index + 1}</span>
+                {title}
+              </p>
+              <p className="mt-2 text-sm leading-6 text-muted">{description}</p>
+            </div>
           ))}
         </div>
+      </section>
+
+      <section className="page-container py-20 lg:py-28">
+        <SectionHeading
+          eyebrow="Product classes"
+          title="Specified for decisions, not dressed for a shelf."
+          description="The catalogue is designed for professional evaluation across current and future agricultural product classes. Commercially sensitive terms remain available only to authorized buyers."
+        />
+        <div className="mt-12 grid gap-6 md:grid-cols-2">
+          {PUBLIC_PRODUCT_CLASSES.map((productClass, index) => (
+            <Link key={productClass.name} href={productClass.href} className="group">
+              <Card className="relative h-full overflow-hidden p-8 transition-transform group-hover:-translate-y-1 md:p-10">
+                <span
+                  className="absolute right-6 top-4 font-display text-7xl text-sand"
+                  aria-hidden="true"
+                >
+                  0{index + 1}
+                </span>
+                <p className="eyebrow relative">{productClass.eyebrow}</p>
+                <h3 className="relative mt-6 font-display text-4xl">{productClass.name}</h3>
+                <p className="relative mt-4 max-w-lg leading-7 text-muted">
+                  {productClass.description}
+                </p>
+                <p className="relative mt-8 font-semibold text-clay">
+                  {productClass.actionLabel} <span aria-hidden="true">→</span>
+                </p>
+              </Card>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      <section className="bg-ink py-20 text-white lg:py-28">
+        <div className="page-container">
+          <div className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-end">
+            <SectionHeading
+              eyebrow="Origins & markets"
+              title="Local capability. Cross-border discipline."
+              description="ZuriBeans begins with distinct operating contexts in Uganda and South Africa. The platform is designed to add markets without teaching every page a new exception."
+              tone="inverse"
+            />
+            <p className="max-w-xl justify-self-end text-base leading-7 text-white/65">
+              A market is more than a currency selector. Eligibility, pricing, inventory, tax,
+              logistics and authorization remain the responsibility of the Baobab services that own
+              them.
+            </p>
+          </div>
+          <div className="mt-12 grid gap-5 md:grid-cols-2">
+            {PUBLIC_MARKET_SUMMARIES.map((summary) => {
+              const item = getMarket(summary.marketKey)
+              return (
+                <article
+                  key={summary.marketKey}
+                  className="rounded-panel border border-white/15 bg-white/5 p-7 md:p-9"
+                >
+                  <div className="flex items-start justify-between gap-4">
+                    <div>
+                      <p className="text-sm font-semibold text-clay">{summary.role}</p>
+                      <h3 className="mt-2 font-display text-4xl">{item.displayName}</h3>
+                    </div>
+                    <p className="text-sm font-semibold text-white/60">{item.currency}</p>
+                  </div>
+                  <p className="mt-5 max-w-xl leading-7 text-white/65">{summary.summary}</p>
+                  <Link
+                    href={`/origins-markets?market=${summary.marketKey}`}
+                    className="mt-7 inline-block font-semibold text-white underline decoration-clay underline-offset-4"
+                  >
+                    Explore this market
+                  </Link>
+                </article>
+              )
+            })}
+          </div>
+        </div>
+      </section>
+
+      <section className="page-container py-20 lg:py-28">
+        <SectionHeading
+          eyebrow="How ZuriBeans trades"
+          title="A clear commercial path from requirement to record."
+        />
+        <ol className="mt-12 grid gap-px overflow-hidden rounded-panel border border-line bg-line md:grid-cols-2 lg:grid-cols-4">
+          {TRADE_STEPS.map((step) => (
+            <li key={step.number} className="bg-surface-raised p-7">
+              <p className="font-display text-3xl text-clay">{step.number}</p>
+              <h3 className="mt-8 text-lg font-semibold">{step.title}</h3>
+              <p className="mt-3 text-sm leading-6 text-muted">{step.description}</p>
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      <section className="border-y border-line bg-sand/40 py-20 lg:py-28">
+        <div className="page-container grid gap-12 lg:grid-cols-2 lg:items-center">
+          <div>
+            <SectionHeading
+              eyebrow="Quality & traceability"
+              title="Confidence is built from evidence."
+              description="Procurement teams need useful specifications, provenance and verification status—not vague claims. ZuriBeans presents what is known, distinguishes declarations from verification, and keeps sensitive terms behind authorization."
+            />
+            <ButtonLink href="/quality-traceability" variant="outline" className="mt-8">
+              How quality is represented
+            </ButtonLink>
+          </div>
+          <dl className="grid gap-px overflow-hidden rounded-panel border border-line bg-line sm:grid-cols-2">
+            {[
+              ["Lot context", "Origin, grade, processing and packaging where authoritative."],
+              [
+                "Verification",
+                "Declared information remains visibly distinct from verified information.",
+              ],
+              [
+                "Documentation",
+                "Commercial and trade records follow the transaction, not an isolated webpage.",
+              ],
+              [
+                "Access control",
+                "Buyer-specific prices and terms are never treated as public catalogue content.",
+              ],
+            ].map(([term, detail]) => (
+              <div key={term} className="bg-surface-raised p-6">
+                <dt className="font-semibold">{term}</dt>
+                <dd className="mt-2 text-sm leading-6 text-muted">{detail}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      </section>
+
+      <section className="page-container grid gap-6 py-20 md:grid-cols-2 lg:py-28">
+        <Card className="bg-leaf p-8 text-white md:p-10">
+          <p className="text-xs font-bold uppercase tracking-[0.18em] text-white/70">
+            For professional buyers
+          </p>
+          <h2 className="mt-5 font-display text-4xl">Bring us a real requirement.</h2>
+          <p className="mt-4 max-w-lg leading-7 text-white/75">
+            Tell the trade desk what you need to source, where it must arrive and when. We will not
+            manufacture an instant price where the commercial context is incomplete.
+          </p>
+          <ButtonLink
+            href="/contact"
+            variant="outline"
+            className="mt-8 border-white/35 text-white hover:bg-white/10"
+          >
+            Discuss a requirement
+          </ButtonLink>
+        </Card>
+        <Card className="bg-surface-raised p-8 md:p-10">
+          <p className="eyebrow">For suppliers</p>
+          <h2 className="mt-5 font-display text-4xl">Build a qualified supply relationship.</h2>
+          <p className="mt-4 max-w-lg leading-7 text-muted">
+            Growers, cooperatives and exporters can declare product, origin, capacity and
+            certification information for review. Submission is the start of qualification, not
+            automatic approval.
+          </p>
+          <ButtonLink href="/sourcing/become-a-supplier" variant="outline" className="mt-8">
+            Supplier requirements
+          </ButtonLink>
+        </Card>
       </section>
     </>
   )
