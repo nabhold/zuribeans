@@ -4,12 +4,45 @@
 
 :root {
   --color-ink: #172219;
+  --color-ink-soft: #26372a;
   --color-canvas: #faf7f0;
   --color-leaf: #526a4f;
+  --color-leaf-dark: #3e533c;
   --color-clay: #bb5b35;
   --color-sand: #e8ddc8;
+  --color-surface: #fffdf8;
+  --color-surface-raised: #ffffff;
+  --color-surface-muted: #f0eadf;
+  --color-line: rgb(23 34 25 / 0.12);
+  --color-line-strong: rgb(23 34 25 / 0.24);
+  --color-muted: #5e675f;
+  --color-muted-strong: #3d493f;
+  --color-focus: #d56a3f;
+  --color-success: #26734d;
+  --color-success-soft: #e6f4ec;
+  --color-success-strong: #155c39;
+  --color-warning: #a26313;
+  --color-warning-soft: #fff3d9;
+  --color-warning-strong: #754408;
+  --color-danger: #b33a32;
+  --color-danger-soft: #fbe9e7;
+  --color-danger-strong: #8d2924;
+  --color-info: #356e8d;
+  --color-info-soft: #e8f2f7;
+  --color-info-strong: #25546d;
   --font-sans: Arial, Helvetica, sans-serif;
   --font-display: Georgia, "Times New Roman", serif;
+  --radius-control: 0.75rem;
+  --radius-panel: 1.5rem;
+  --shadow-control: 0 1px 2px rgb(23 34 25 / 0.06);
+  --shadow-panel: 0 18px 50px -38px rgb(23 34 25 / 0.4);
+  --shadow-overlay: 0 32px 90px -24px rgb(0 0 0 / 0.55);
+  --container-page: 80rem;
+  --container-reading: 48rem;
+  --layer-header: 40;
+  --layer-overlay: 60;
+  --transition-fast: 150ms;
+  --transition-standard: 240ms;
 }
 
 * {
@@ -23,10 +56,58 @@ body {
   background: var(--color-canvas);
   color: var(--color-ink);
 }
+a,
+button,
+input,
+select,
+textarea {
+  transition-duration: var(--transition-fast);
+}
 a {
   text-underline-offset: 0.2em;
 }
 :focus-visible {
-  outline: 3px solid var(--color-clay);
+  outline: 3px solid var(--color-focus);
   outline-offset: 4px;
+}
+
+::selection {
+  background: var(--color-sand);
+  color: var(--color-ink);
+}
+
+@layer components {
+  .page-container {
+    width: min(100% - 2.5rem, var(--container-page));
+    margin-inline: auto;
+  }
+
+  .reading-container {
+    width: min(100% - 2.5rem, var(--container-reading));
+    margin-inline: auto;
+  }
+
+  .eyebrow {
+    color: var(--color-clay);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    line-height: 1rem;
+    text-transform: uppercase;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
 }

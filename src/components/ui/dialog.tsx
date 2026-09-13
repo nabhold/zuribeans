@@ -1,0 +1,57 @@
+"use client"
+
+import { useEffect, useRef, type ReactNode } from "react"
+import { Button } from "./button"
+
+export function Dialog({
+  open,
+  title,
+  description,
+  children,
+  onClose,
+}: {
+  open: boolean
+  title: string
+  description?: string
+  children: ReactNode
+  onClose: () => void
+}) {
+  const ref = useRef<HTMLDialogElement>(null)
+
+  useEffect(() => {
+    const dialog = ref.current
+    if (!dialog) return
+    if (open && !dialog.open) dialog.showModal()
+    if (!open && dialog.open) dialog.close()
+  }, [open])
+
+  return (
+    <dialog
+      ref={ref}
+      aria-labelledby="dialog-title"
+      aria-describedby={description ? "dialog-description" : undefined}
+      onClose={onClose}
+      onCancel={onClose}
+      className="w-[min(36rem,calc(100%-2rem))] rounded-panel bg-surface p-0 text-ink shadow-overlay backdrop:bg-ink/60"
+    >
+      <div className="p-6 md:p-8">
+        <div className="flex items-start justify-between gap-6">
+          <div>
+            <h2 id="dialog-title" className="font-display text-2xl">
+              {title}
+            </h2>
+            {description ? (
+              <p id="dialog-description" className="mt-2 text-sm leading-6 text-muted">
+                {description}
+              </p>
+            ) : null}
+          </div>
+          <Button variant="ghost" size="sm" onClick={onClose} aria-label={`Close ${title}`}>
+            Close
+          </Button>
+        </div>
+        <div className="mt-6">{children}</div>
+      </div>
+    </dialog>
+  )
+}
